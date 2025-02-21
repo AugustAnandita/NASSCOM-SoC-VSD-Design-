@@ -244,561 +244,112 @@ magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs
 
 ---
 
-# DAY 2 :  Good floorplan vs bad floorplan and introduction to library cells
 
-* Chip Floor planning considerations
+## Day 3: Design a Library Cell using Magic Layout and Ngspice Characterization
 
-* Utilization factor and aspect ratio
 
-* Concept of pre-placed cells
 
-* De-coupling capacitors
+1. Clone custom inverter standard cell design from github repository
+ ```bash  
+# Change directory to openlane
+cd Desktop/work/tools/openlane_working_dir/openlane
 
-* Power planning
+# Clone the repository with custom inverter design
+git clone https://github.com/nickson-jose/vsdstdcelldesign
 
-* Pin placement and logical cell placement blockage
+# Change into repository directory
+cd vsdstdcelldesign
 
-* Steps to run floorplan using OpenLANE
+# Copy magic tech file to the repo directory for easy access
+cp /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech .
 
-* Library building and Placement
+# Check contents whether everything is present
+ls
 
-* Netlist binding and initial place design
+# Command to open custom inverter layout in magic
+magic -T sky130A.tech sky130_inv.mag &
+```
+Screenshot of commands run
 
-* Optimize placement using estimated wire-length and capacitance
 
-* Final placement optimization
 
-* Need for libraries and characterization
 
-* Congestion aware placement using RePlAce
 
-* Cell design and characterization flows
 
-* Inputs for cell design flow
+![L3_1](https://github.com/user-attachments/assets/f9f004c5-9787-48e5-8446-5e8dfad08304)
 
-* Circuit design steps
 
-* Layout design step
+![L3_2](https://github.com/user-attachments/assets/eec29e86-d751-4ddf-983e-e09187b0eeaa)
 
-* Typical characterization flow
+![L3_3](https://github.com/user-attachments/assets/f8bd122e-87a6-4283-983c-be7988e62594)
 
-* General timing characterization parameters
 
-* Timing threshold definitions
+![L3_4](https://github.com/user-attachments/assets/71e98688-b066-4386-8df5-3b5284b19ba3)
 
-*Propagation delay and transition time
 
-# THEORY :
+![L3_5](https://github.com/user-attachments/assets/e4f50360-3d6e-498d-89ea-4e195eb65e2f)
 
+Screenshot of tkcon window after running above commands
+![L3_6](https://github.com/user-attachments/assets/241a79e8-b750-4bb8-88fe-bff6d06d0f91)
+Spice extraction of inverter in magic.
+Commands for spice extraction of the custom inverter layout to be used in tkcon window of magic
+```bash
+# Check current directory
+pwd
 
-![image](https://github.com/user-attachments/assets/f516492f-125d-4c06-95ae-ae56ad23bb74)
+# Extraction command to extract to .ext format
+extract all
 
-here H= height , w = width
+# Before converting ext to spice this command enable the parasitic extraction also
+ext2spice cthresh 0 rthresh 0
 
+# Converting to ext to spice
+ext2spice
+```
+Final edited spice file ready for ngspice simulation
+```bash
+* SPICE3 file created from sky130_inv2.ext - technology: sky130A  
+.option scale=0.01u  
+.include ./libs/pshort.lib  
+.include ./libs/nshort.lib  
 
-# Utilization Factor and Aspect Ratio
+M1000 Y A VPWR VPWR pshort_model.0 w=37 l=23  
++ ad=1443 pd=152 as=1517 ps=156  
+M1001 Y A VGND VGND nshort_model.0 w=35 l=23  
++ ad=1435 pd=152 as=1365 ps=148  
 
-Utilization Factor : It is the area occupied by the netlsit to the total area of the core.
+VDD VPWR 0 3.3V  
+VSS VGND 0 0V  
+Va A VGND PULSE(0V 3.3V 0 0.1ns 0.1ns 2ns 4ns)  
 
-* when the utilization factor is 1 that is 100% ,which means the core is completely occupied by the logic.
+C0 A Y 0.05fF  
+C1 Y VPWR 0.11fF  
+C2 A VPWR 0.07fF  
+C3 Y 0 2fF  
+C4 VPWR 0 0.59fF  
 
-  #  Utilization Factor = Area Occupied by the netlsit / Total area of the core.
+.tran 1n 20n  
 
-Aspect Ratio : height of core diveded by width of core
+.control  
+run  
+.endc  
+.end  
+```
+Post-layout ngspice simulations.
+Commands for ngspice simulation
+```bash
+# Command to directly load spice file for simulation to ngspice
+ngspice sky130_inv.spice
 
-* When aspect Ratio is 1 it indicates that the chip is square shape. when aspect ratio is other than 1,indicates that the chip is rectangular shape.
-  
-# Aspect Ratio = height / width
-
-
-![image](https://github.com/user-attachments/assets/404a3d9f-1b33-49a0-a03f-961ded64627b)
-
-
-
-Let's put the dimensions we have, we get
-
-Utilization factor = 4*1sq.unit / 4unit *2unit = 0.5
-
-So, utilization factor = 0.5 (It signifies Rectangle shape)
-
-Aspect Ratio = Height / width = 2 unit / 2unit = 1
-
-Whenever Aspect Ratio is 1 it signifies that chip is square shaped. When it is not 1 it means the chip is in rectangular shape.
-
-![image](https://github.com/user-attachments/assets/cd143dd9-0077-4ac2-b656-0b5f7c2774e0)
-
-
-so the design will look like above image
-
-
-# Pre-palced cells : 
-Blocks have user-defined locations,and hence are placed in chip before automated placememt-and-routing and are called as pre-placed cells.
-
-
-# De-coupling Capacitors
-
-![image](https://github.com/user-attachments/assets/56fc86f1-dd29-4336-918e-8b7886c94039)
-
-Consider the amount of switching current required for a complex circuit something like above
-
-1.consider capacitance to be zero for the discussiion. Rdd,Rss,Ldd and Lss are well defined values.
-
-2.During switching operation ,the circuit demands switching current i.e peak current (I peak)
-
-3.Now,due to the presence od Rddand Ldd,there will be a voltage drop access them and the voltage at Node 'A would be Vdd' instead of Vdd. 
-
-# Noise Margin :
-
-** If Vdd goes below the noise margin ,due to Rdd and Ldd ,the logic '1' at the output of circuit wont be detected as logic '1' at the input of the circuit following this circuit  
-
-![image](https://github.com/user-attachments/assets/cdc9474d-0edc-4da6-b9f6-3d4f6fb5c90f)
-
-We soleve this problem using by adding De-coupling Capcacitors 
-
-sol: 1. Addition of Decoupling Capacitor in parallel with the circuit .
-
-2.Every time the circuit switches,it draws current from Cd, whereas ,the RL network is used to replenish the charge into Cd.
-
-
-![image](https://github.com/user-attachments/assets/9924785a-396d-4d0d-84bb-0147c6fd7cea)
-
-* The above image is the adding de-coupling capacitor to the design.
-  
-![image](https://github.com/user-attachments/assets/8032b1a4-f123-41ba-8da8-baf6e232b661)
-
-
-# POWER PLANING 
-
-
-![image](https://github.com/user-attachments/assets/fa75b881-2b1a-4963-8297-721004d07ac2)
-
-The below image is the power mesh creation 
-
-![image](https://github.com/user-attachments/assets/1d5b94f2-132d-472e-916d-ad15217d7087)
-
-# Pin Placement 
-
-lets take the below example for pin placement 
-
-![image](https://github.com/user-attachments/assets/e85f42d4-9dca-4a1a-b3dc-c07e69d89f98)
-
-* The inputs ports of pin placement is done at left hand side
-
-* And the output ports of pin placement is done at right hand side 
-
-![image](https://github.com/user-attachments/assets/bc2ff279-d230-4727-ab6c-5f403daafc3d)
-
-
-# PLACEMENT 
-
-![image](https://github.com/user-attachments/assets/280b3314-412c-411c-86eb-4ea985e2a8bf)
-
-# Optimized Placement 
-
-** Optimized placement is the stage  where we estimate wire length and capacitance and,based on that ,insert repeators.
-
-![image](https://github.com/user-attachments/assets/8df3d08e-abc2-47e3-b45a-2b88f03407f2)
-
-# LIBRARY CHARACTERIZATION AND MODELLING 
-
-* Part 1 :Concepts and theory - NLDM ,CSS timing,power and noise characterization  
-
-1 . In this the frist one is "LOGIC SYNTHESIS" ,in this the RTL code converted into optimized gate level netlist.
-
-![image](https://github.com/user-attachments/assets/8c80928e-593c-4a02-ac58-f3490452fa8e)
-
-2. second one is "FLOORPLAN",in this it decides the core and die size. these sizes completely dependent on the gates of netlist 
-
-![image](https://github.com/user-attachments/assets/7b275d16-bce2-405b-a665-a4e66e1d3c95)
-
-3.The third one is "PLACEMENT" The standrad cells are actually placed here.
-
-![image](https://github.com/user-attachments/assets/b0f71bf1-9315-4738-b8e7-6cb91a2573be)
-
-4. The fourth one is "CTS" .in this clock tree can be build usind clock buffers.
-
-![image](https://github.com/user-attachments/assets/4b7831a7-35fb-476c-ba81-8990235c5afd)
-
-5. The fivth is "ROUTING" ,in this the actual routing of design is done here.
-
-![image](https://github.com/user-attachments/assets/a249fad1-0d3f-402f-b8e1-c23b87b8126e)
-
-6. sixth one is "STATIC TIMIMG ANALYSIS",in this it can analyze the setup and hold timing of design.
-
-![image](https://github.com/user-attachments/assets/3007d92a-b0dd-4c29-b07f-bb287c24356d)
-
-
-# INPUTS FOR CELL DESIGN FLOW 
-
-![image](https://github.com/user-attachments/assets/e3d81266-a92a-477c-8428-5111148bbf10)
-
-fom above we look an example of inverter cell view 
-
-*Mainly cell view can be divided into 3 parts i.e : 1)inputs  2) Design steps  3)outputs
-
-1) Inputs : Process Design Kit (PDK), DRC&LVS rules, SPICE Models .library & user-defined specs     
-
-![image](https://github.com/user-attachments/assets/c134eed9-8611-4d70-a099-a809dc581128)
-
-2) Design Steps :: circuit design ,layout design, characterization
-
-
-![image](https://github.com/user-attachments/assets/16649e97-b8fc-4337-9c96-6c2f364cd4cb)
-
-* Layout Design :
-
-![image](https://github.com/user-attachments/assets/7bb60642-3a72-4817-997f-72164e2fe24c)
-
-
-![image](https://github.com/user-attachments/assets/593427f5-8c1d-4de9-9699-8300eb339ad8) 
-
-* Characterization flow :
-
-![image](https://github.com/user-attachments/assets/f5e336da-2dea-4cba-9032-460b50e7622c)
-
-
-* Timing Characterization :
-
-![image](https://github.com/user-attachments/assets/920ef075-b8d6-4f2e-9808-775ad0de7218)
-
-
-a)Timing Thresh hold
-  
- ![image](https://github.com/user-attachments/assets/ef70b0e5-ff95-4e0a-bc5e-8c0dbf922cef)
-
- b) Popogation Delay 
-
- ![image](https://github.com/user-attachments/assets/8c0f20c4-b2c1-44af-ba32-f27f91ef09de)
-
-
-![image](https://github.com/user-attachments/assets/ea920050-44b1-4b18-a787-be517bb47eb0)
-
-c)Transition Time 
-
- ![image](https://github.com/user-attachments/assets/7d930e4a-97ea-4f28-9b39-82c24b51cb84)
-
-![image](https://github.com/user-attachments/assets/f0e7b7b6-9b28-4bb0-8c42-b29e6bea99bf)
-
-d)Output current Wave form 
-
-3) Outputs : CDS(  circuit Description Language) , GDSII ,LEF , Extracted Spice Netlsit (.cir) ,Timing , Noise , Power .libs ,function.
-
-
-
-# Day 2 LAb REPORTS
-
-The Next step after synthesis is floorplan
-
-Run the floorplan using the command run_floorplan
-
-![image](https://github.com/user-attachments/assets/4f407ae6-3912-42da-b72b-a881414e3499) 
-
-![image](https://github.com/user-attachments/assets/225c2d08-d5eb-4fcb-9a36-052477425657)
-
-
-![image](https://github.com/user-attachments/assets/2a2686b0-3005-4b94-b07b-ee033418fa68)
-
-![image](https://github.com/user-attachments/assets/3f18339d-40eb-4131-9905-bd7ba9317a94)
-
-After run the floorplan we have one def file i.e picorv32a.floorplan.def
-
-![image](https://github.com/user-attachments/assets/68d23bfa-e41a-4cc7-afd6-775addc89728)
-
-![image](https://github.com/user-attachments/assets/4c56fe23-8295-4bef-ba2b-19faac8c12b5)
-
-In above the die area = (0 0)  (660685  671405)
-
-1 micron=1000 database units
-
-width=660685/1000 = 660.685
-
-height = 671405/1000 = 671.405
-
-# Floorplan Layout in Magic
-
-![image](https://github.com/user-attachments/assets/2214e2dc-c540-4dcb-af36-c593e69fb670)
- 
-![image](https://github.com/user-attachments/assets/4293643a-589f-4e26-97b2-08c0d9f0e1d1)
-
-
-# Palcement 
- 
-after floorplan next step is placemnet 
-
-run the placement by using the command 'run_placement' 
-
-Placement : Placement is the stage where the standard cell placement can be fixed.
-
-In placement there are two steps 
-
-1)Global Placemet: It is nothing but coars placement
-
-2)Detailed placement : It is nothing but legalized placement
-
-
-![image](https://github.com/user-attachments/assets/9e0cb3e8-6f9b-4e85-b19c-16eda4b017b1)
-
-![image](https://github.com/user-attachments/assets/3bebdde8-54cf-4eaa-a1b4-c01b31f1dbf9)
-
-# congestion aware placemnet using Replace 
-
-![image](https://github.com/user-attachments/assets/478dd6a4-e6a9-4b07-bec5-2f002b3eb135)
-
-![image](https://github.com/user-attachments/assets/81d25b85-4663-4e76-992d-92f23329f998)
-
-![image](https://github.com/user-attachments/assets/63ecddf9-79e0-4cb8-8a38-da26d39930a1)
-
-# Day 3 : Design library cell using Magic Layout and ngspice characterization
-
-Content:
-
- * Labs for CMOS inverter ngspice simulations
-
-* IO placer revision
-
-* SPICE deck creation for CMOS inverter
-
-* SPICE simulation lab for CMOS inverter
-
-* Switching Threshold Vm
-
-* Static and dynamic simulation of CMOS inverter
-
-* Lab steps to git clone vsdstdcelldesign
-
-* Inception of layout ̂A CMOS faabrication process
-
-* Create Active regions
-
-* Formation of N-well and P-well
-
-* Formation of gate terminal
-
-* Lightly doped drain (LDD) formation
-
-* Source and drain formation
-
-* Local interconnect formation
-
-* Higher level metal formation
-
-* Lab introduction to Sky130 basic layers layout and LEF using inverter
-
-* Lab steps to create std cell layout and extract spice netlist
-
-* Sky130 Tech File Labs
-
-* Lab steps to create final SPICE deck using Sky130 tech
-
-* Lab steps to characterize inverter using sky130 model files
-
-* Lab introduction to Magic tool options and DRC rules
-
-* Lab introduction to Sky130 pdk's and steps to download labs
-
-* Lab introduction to Magic and steps to load Sky130 tech-rules
-
-* Lab exercise to fix poly.9 error in Sky130 tech-file
-
-* Lab exercise to implement poly resistor spacing to diff and tap
-
-* Lab challenge exercise to describe DRC error as geometrical construct
-
-* Lab challenge to find missing or incorrect rules and fix them
-
-# Theory
-
-# SPICE deck creation for CMOS inverter :
-
-![image](https://github.com/user-attachments/assets/02c22f23-2800-4f80-bf39-2f794d7f4148)
-
-![image](https://github.com/user-attachments/assets/b5ce9e89-0c86-4337-a880-8e4f7533a4e2)
-
-![image](https://github.com/user-attachments/assets/7994c749-6c99-46c2-b349-576ac983d17b)
-
-
-![image](https://github.com/user-attachments/assets/df5889e4-8809-4480-854f-03ea6b0df727)
-
-![image](https://github.com/user-attachments/assets/1484ff84-2dff-4df3-93b5-fa75662d214a)
-
-![image](https://github.com/user-attachments/assets/03f7892f-b006-4c20-84a1-3d0381f82105)
-
-# Create Active Region:
-
-Active Region is the place where we see CMOS & NMOS 
-
-# 16-Mask CMOS process 
-
-1) Selecting a substate
-
-2) Creating Active Region for Transistors
-
-![image](https://github.com/user-attachments/assets/78c05a97-332e-43d0-ba2f-dcdb69f9a58b)
-
-![image](https://github.com/user-attachments/assets/0a6dd8c3-8cf2-467c-86fd-6549b8b3c56d)
-
-* Removing Mask
-
-![image](https://github.com/user-attachments/assets/bea49926-dcca-48fb-8cfc-f3f632b92356)
-
-* Removing Photoresist
-
-![image](https://github.com/user-attachments/assets/fc2cc71a-e714-475a-88dd-52554aca0ecf)
-
-*Removing silicon Nitrate 
-
-![image](https://github.com/user-attachments/assets/3d33873a-efe5-4e1a-96f5-749c867b55a4)
-
-
-3) N-Well and P-Well formation :
-
-Top view of Mask 2
-
-![image](https://github.com/user-attachments/assets/9e433286-75ba-4918-9883-392cae7f863a)
-
-![image](https://github.com/user-attachments/assets/782f1d81-a492-47ca-a60d-c5ec83620c5a)
-
-* Boron is a P-type it creates a P-Well,which needs high energy needed for creating P-Well
-
- ![image](https://github.com/user-attachments/assets/01936a71-63c6-4014-a7c5-497358ad7a1e)
-
-![image](https://github.com/user-attachments/assets/045852c1-a934-4ada-be19-3bbd6d2c92bc)
-
-![image](https://github.com/user-attachments/assets/7e1db51b-c86c-4b96-b843-59e7e89d2ec7)
-
-4 ) Creating Gates :
-
-![image](https://github.com/user-attachments/assets/c3ddc58f-1720-4baf-a461-900961922b3c)
- 
-![image](https://github.com/user-attachments/assets/6d563a6e-002f-463d-8f19-705d7a8711a4)
-
-![image](https://github.com/user-attachments/assets/4b8408b2-7342-4724-8909-fd444e6acd6e)
-
-![image](https://github.com/user-attachments/assets/36f7d7a3-5797-4c84-9b61-e3e3a392417f)
-
-* Top View of Gate Mask 6
-
-![image](https://github.com/user-attachments/assets/d9b13790-2d16-47ad-b72b-b1fe430e1f82)
-
-
-5) Lightly dopped drain (LLD) formation
-
-![image](https://github.com/user-attachments/assets/b203e62c-a52d-4cdf-96fa-e185cec97ae9)
-
-![image](https://github.com/user-attachments/assets/a42d2451-59eb-4d3d-a745-2fde1f2a5860)
-
-![image](https://github.com/user-attachments/assets/4bcced79-5632-4b28-9f4c-d95edc97f864)
-
-![image](https://github.com/user-attachments/assets/6e233960-7b25-4fc5-aa5a-8112ab625b9d)
-
-![image](https://github.com/user-attachments/assets/53f2c95e-38e7-43ef-99ad-dbd3a7e16227)
-
-![image](https://github.com/user-attachments/assets/ed79ac4b-9006-4479-a773-a04a38dcee5c)
-
-6) Source And Drain Formation
-
-![image](https://github.com/user-attachments/assets/5bbb61d7-809d-4739-a3d5-c2ef1ed551e3)
-
-![image](https://github.com/user-attachments/assets/c4b8f1f6-8e37-4fd1-9b18-2f961a2522d3)
-
-![image](https://github.com/user-attachments/assets/c4c1e785-30d0-47f2-9a6c-6cc17e008f15)
-
-![image](https://github.com/user-attachments/assets/12b1d14a-1d29-4f7a-86df-00d5ff744cf6)
-
-![image](https://github.com/user-attachments/assets/1fdf418c-73e8-434c-9627-d74758b0cdeb)
-
-7) steps to form contacts and interconnects (local) 
-
- * Deposite titanium on wafer surface, using sputtering 
-
-![image](https://github.com/user-attachments/assets/fdbdc5ec-5747-4850-9d4a-7969117e5f3a)
-
-![image](https://github.com/user-attachments/assets/c47ed4d2-d528-4e7a-824a-80721a55b48c)
-
-![image](https://github.com/user-attachments/assets/ade3381d-25c3-4762-b9ff-220766b3dc4d)
-
-![image](https://github.com/user-attachments/assets/f3a668f4-f468-4303-8e99-5f97ea394fa8)
-
-* TiN is etched using RCA cleaning
-
-![image](https://github.com/user-attachments/assets/8c545865-8a06-4279-9299-0374fb9dd861)
-
-![image](https://github.com/user-attachments/assets/74c1311d-538c-4f19-8b7c-f2ee558abb9d)
-
-![image](https://github.com/user-attachments/assets/646030a9-f028-49de-9817-431c952eda44)
-
-
-8) Higher level metal Formation
-
-![image](https://github.com/user-attachments/assets/37a93098-3604-41d1-889f-4cc92d6bfaa2)
-
-![image](https://github.com/user-attachments/assets/5aa78065-f32b-45b0-aa6b-2ac6cab3e23a)
-
-![image](https://github.com/user-attachments/assets/67d185f9-7ad5-4226-8635-65237a160d5a)
-
-![image](https://github.com/user-attachments/assets/7dd08b17-4126-4ffe-8c59-2c0431ef5c31)
-
-![image](https://github.com/user-attachments/assets/fd96be8e-839a-4ca7-88de-a6748564762e)
-
-![image](https://github.com/user-attachments/assets/3d32bd17-47cf-4d08-a6ab-2fccaf6dce82)
-
-![image](https://github.com/user-attachments/assets/441643d3-1b10-4573-a9a1-40df2c1df70a)
-
-![image](https://github.com/user-attachments/assets/55165152-2c5e-49a6-b982-179f76f284bb)
-
-![image](https://github.com/user-attachments/assets/07ba6b2e-5c82-4119-905c-bd7e372804e5)
-
-![image](https://github.com/user-attachments/assets/d2691d3c-c722-4615-995b-a0f4d921fbb2)
-
-# Day 3 LAB Reports
-
-IO PLACER Rivision:
-
-![image](https://github.com/user-attachments/assets/5704e9fe-b170-4633-821b-d7e48b9b6176)
-
-# LAB STEPS TO GIT CLONE VSDSTDCELL DESIGN
-
-![image](https://github.com/user-attachments/assets/69748ce0-b679-4f75-a540-60ab62e0f50d)
-
-# Load the custom inverter layout in magic
-
-![image](https://github.com/user-attachments/assets/3d872b1b-f54a-41d4-bd08-df0081de5c8a)
-
-
-![image](https://github.com/user-attachments/assets/147bc2fb-868c-4ac0-8b6f-5ab0d5cba9e5)
-
-![image](https://github.com/user-attachments/assets/387d8422-dde7-464c-bda8-5b29b5e14499)
-
-# Extract spice Netlist
-
-![image](https://github.com/user-attachments/assets/9730a4a6-73be-4a6b-bdaf-be57a4cc90a0)
-
-
-![image](https://github.com/user-attachments/assets/04d7e957-7d12-4fc1-83ea-99648a16cadf)
-
-
-# Create final SPICE desk using sky130 tech
-
-![image](https://github.com/user-attachments/assets/449e9736-233d-4278-bff8-32d467b6b932)
-
-![image](https://github.com/user-attachments/assets/0fe3ef92-2055-4936-b2cd-89c739aed1f2)
-
-
-# ngspice simulation
-
-![image](https://github.com/user-attachments/assets/ffdab85b-0d90-45a7-8118-0131b384012d)
-
-input
-
-![image](https://github.com/user-attachments/assets/efe880cd-8c79-4e94-b80f-85735085fb6f)
-
-output
-
-![image](https://github.com/user-attachments/assets/b3496352-a15d-402b-ad60-9a984a5297b7)
-
-![image](https://github.com/user-attachments/assets/c8c28dc0-07ac-4948-b35e-0e513a12e7a4)
-
-![image](https://github.com/user-attachments/assets/504433ed-e3e1-4155-b266-77698373deee)
+# Now that we have entered ngspice with the simulation spice file loaded we just have to load the plot
+plot y vs time a
+```
+![L3_7](https://github.com/user-attachments/assets/3c4537ba-b432-412e-a295-22467954079f)
+Screenshot of generated plot
+![L3_8](https://github.com/user-attachments/assets/06144dd5-887a-4d96-8647-2a99adb7df0c)
+![L3_9](https://github.com/user-attachments/assets/ed79e9af-96d0-46ab-8b48-7bce8481698b)
+![L3_10](https://github.com/user-attachments/assets/43b1ff53-d09b-4230-948e-79a5309937b7)
+![L3_11](https://github.com/user-attachments/assets/baeb22b8-8e3a-4bb5-aa4f-530e9234bae7)
 
 
 # DAY 4 : Timing Analysis with Real clocks using openSTA
