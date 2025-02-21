@@ -352,114 +352,26 @@ Screenshot of generated plot
 ![L3_11](https://github.com/user-attachments/assets/baeb22b8-8e3a-4bb5-aa4f-530e9234bae7)
 
 
-# DAY 4 : Timing Analysis with Real clocks using openSTA
 
-# Contents:
-
-* Timing modeling using delay tables
-
-* Lab steps to convert grid info to track info
-
-* Lab steps to convert magic layout to std cell LEF
-
-* Introduction to timing libs and steps to include new cell in synthesis
-
-* Introduction to delay tables
-
-* Delay table usage Part 1
-
-* Delay table usage Part 2
-
-* Lab steps to configure synthesis settings to fix slack and include vsdinv
-
-* Timing analysis with ideal clocks using openSTA
-
-* Setup timing analysis and introduction to flip-flop setup time
-
-* Introduction to clock jitter and uncertainty
-
-* Lab steps to configure OpenSTA for post-synth timing analysis
-
-* Lab steps to optimize synthesis to reduce setup violations
-
-* Lab steps to do basic timing ECO
-
-* Clock tree synthesis TritonCTS and signal integrity
-
-* Clock tree routing and buffering using H-Tree algorithm
-
-* Crosstalk and clock net shielding
-
-* Lab steps to run CTS using TritonCTS
-
-* Lab steps to verify CTS runs
-
-* Timing analysis with real clock using openSTA
-
-* Setup timing analysis using real clocks
-
-* Hold timing analysis using real clocks
-
-* Lab steps to analyze timing with real clocks using OpenSTA
-
-* Lab steps to execute OpenSTA with right timing libraries and CTS assignment
-
-* Lab steps to observe impact of bigger CTS buffers on setup and hold timing
-
-# Theory
-
-![image](https://github.com/user-attachments/assets/f7ba9de0-b838-43c4-a516-e8310c43c7de)
-
-![image](https://github.com/user-attachments/assets/3d6a5f77-f34d-4517-aa48-1f3bd5ce06b2)
-
-![image](https://github.com/user-attachments/assets/bb45c21e-5294-46bc-8aad-71ed2ab20063)
-
-Assume c1=c2=c3=c4=25fF and Cbuf1=Cbuf2=30fF
-
-Total Cap at node 'A'=> 60fF
-
-Total Cap at node 'B'=> 50fF
-
-Total Cap at node 'C'=> 50fF
-
-Example:
-
-![image](https://github.com/user-attachments/assets/377c7b53-a3a1-4183-8b14-772bac3a84dd)
-
-![image](https://github.com/user-attachments/assets/a8410720-9968-4b20-b4da-d8750f1a41f1)
+## DAY 4 : Timing Analysis with Real clocks using openSTA
 
 
-# Timing analysis using openSTA
-
-![image](https://github.com/user-attachments/assets/55c90d6f-33ed-4c61-933f-b0d44554f6c0)
-
-![image](https://github.com/user-attachments/assets/a069a99a-6e40-4748-bae5-814295cffb45)
-
-![image](https://github.com/user-attachments/assets/52b4a7f1-cc6a-4193-8e50-783f905431c7)
-
-![image](https://github.com/user-attachments/assets/85ab955d-00a5-4031-8fef-fbc7f141118d)
+![L4_0_a](https://github.com/user-attachments/assets/cabbe6c7-2a8f-40cb-9411-f1d28afacd1d)
 
 
-# Clock tree routing
+### Timing analysis using openSTA
 
-![image](https://github.com/user-attachments/assets/3607b07e-2070-440f-bf71-76bdbbd20058)
-
-![image](https://github.com/user-attachments/assets/17482635-52c2-4499-849f-d2beb99ec2f2)
-
-![image](https://github.com/user-attachments/assets/d637280b-7ee7-47c7-b9bc-2c7b43e92000)
+![L4_0_b](https://github.com/user-attachments/assets/639bbbed-68aa-4b20-9bd3-5ec2793aa1bc)
 
 
-![image](https://github.com/user-attachments/assets/3ef991a2-7a0e-433d-b4d8-a22e45cfa89b)
+### Clock tree routing
 
-![image](https://github.com/user-attachments/assets/1fa24129-b10d-47c4-bfc7-eccd6469060b)
+![L4_0_c](https://github.com/user-attachments/assets/676ffa7b-4d23-4eb0-a285-5535cc1278e0)
 
-# Crosstalk and Clock net shielding
+### Crosstalk and Clock net shielding
 
-![image](https://github.com/user-attachments/assets/5e71f7cf-a138-4b42-8f74-9e885f5a37ee)
-
-![image](https://github.com/user-attachments/assets/8485bcda-6164-4b58-b7da-414fa71d4a0c)
-
-# Setup and Hold timing analysis
+![L4_0_d](https://github.com/user-attachments/assets/35117ab9-855b-4f4e-b340-39b53cd70a4a)
+### Setup and Hold timing analysis
 
 ![image](https://github.com/user-attachments/assets/e7e2a7b3-24ee-4bfd-8ab2-77034e1e4266)
 
@@ -469,9 +381,7 @@ Example:
 
 ![image](https://github.com/user-attachments/assets/5e37f635-fed4-4ff2-b2e3-17f6ac643bb9)
 
-# Day 4 Lab
-
-# Lab steps to convert grid info to track info
+### Lab steps to convert grid info to track info
 
 ![image](https://github.com/user-attachments/assets/3204cebd-08fa-4df7-87fd-25d488c36b9f)
 
@@ -482,7 +392,7 @@ Example:
 
 ![image](https://github.com/user-attachments/assets/7b770fba-f038-4992-b53d-d8093ad05917)
 
-# Lab steps to convert magic layout to std cell LEF
+### Lab steps to convert magic layout to std cell LEF
 ![image](https://github.com/user-attachments/assets/d5f5f21b-4abc-41f6-ae9e-c0ce5c80eb30)
 
 ![image](https://github.com/user-attachments/assets/0930bbcb-1a92-410c-8eb6-b0120598fddb)
@@ -493,25 +403,25 @@ Example:
 
 ![image](https://github.com/user-attachments/assets/53332981-2982-4a76-b328-5f94aff24f41)
 
-# sky130_vsdinv.lef
+### sky130_vsdinv.lef
 
 ![image](https://github.com/user-attachments/assets/dd5ea8c8-ee15-4bda-8aa2-1ec294b3f75e)
 
-# Introduction to timing libs and steps to include new cell in synthesis
+### Introduction to timing libs and steps to include new cell in synthesis
 
 ![image](https://github.com/user-attachments/assets/f189a358-93c3-405c-956a-d59867769ba4)
 
 ![image](https://github.com/user-attachments/assets/45994b4e-79ab-4bf7-85b3-c7c1addfaea1)
 
-# sky_130_fd_sc_hd_typical.lib
+### sky_130_fd_sc_hd_typical.lib
 
 ![image](https://github.com/user-attachments/assets/94aeb299-f4b4-4d54-9a97-d8ee68394a6d)
 
-# sky_130_fd_sc_hd_slow.lib
+### sky_130_fd_sc_hd_slow.lib
 
 ![image](https://github.com/user-attachments/assets/8af1630b-52b2-4660-8b44-6a972abc6459)
 
-# sky_130_fd_sc_hd_fast.lib
+### sky_130_fd_sc_hd_fast.lib
 
 ![image](https://github.com/user-attachments/assets/6d4c8ca6-c849-45d4-a0c2-8a6358aa94c4)
 
@@ -521,11 +431,11 @@ Example:
 ![image](https://github.com/user-attachments/assets/55135d9d-079d-4129-aac5-1c931e96cebc)
 
 
-# config.tcl file
+### config.tcl file
 
 ![image](https://github.com/user-attachments/assets/4ce0a43b-a951-4109-8ae2-54512b7ce08e)
 
-# Openlane Execution
+### Openlane Execution
 
  ./flow.tcl -interactive
 
@@ -542,15 +452,15 @@ add_lefs -src $lefs
 
 ![image](https://github.com/user-attachments/assets/e7369078-2335-4c13-badc-d1ed2d4e149d)
 
-# run_synthesis
+### run_synthesis
 
 ![image](https://github.com/user-attachments/assets/b99f45e5-1367-401d-90f3-c341cbb7eecd)
 
-# README.md file
+### README.md file
 
 ![image](https://github.com/user-attachments/assets/6d8d7792-1439-4064-b2e9-b59848547ce2)
 
-# To fix slack 
+### To fix slack 
 
 ![image](https://github.com/user-attachments/assets/f7047d22-7af9-4011-b065-cf6fe1f51a6d)
 
@@ -571,7 +481,7 @@ add_lefs -src $lefs
 
 ![image](https://github.com/user-attachments/assets/6b4e9bfa-c8aa-4754-9f54-d18788520895)
 
-# Post Synthesis timing analysis with openSTA tool
+### Post Synthesis timing analysis with openSTA tool
 
 Commands:
 
@@ -583,19 +493,19 @@ cd Desktop/work/tools/openlane_working_dir/openlane
 
 sta pre_sta.conf
 
-# invole sta tool by using "sta" command
+### invole sta tool by using "sta" command
 
 ![image](https://github.com/user-attachments/assets/7671521c-7d5b-4935-aa7a-2f2bb303061d)
 
-# prep_sta.conf file 
+### prep_sta.conf file 
 
 ![image](https://github.com/user-attachments/assets/6dd401e9-be16-4b47-b8dc-e92003ae6f44)
 
-# picorv32a.sdc file 
+### picorv32a.sdc file 
 
 ![image](https://github.com/user-attachments/assets/2c253062-6573-4899-bcbc-de28deacd638)
 
-# Make timing ECO fixes to remove all violations
+### Make timing ECO fixes to remove all violations
 
 ![image](https://github.com/user-attachments/assets/fb4a61fa-847c-4ef7-b008-9ff3c8854f0b)
 
@@ -603,11 +513,11 @@ sta pre_sta.conf
 
 ![image](https://github.com/user-attachments/assets/b6f82549-bd3a-4611-b2af-5b3613177fc4)
 
-# cell getting Replaced
+### cell getting Replaced
 
 ![image](https://github.com/user-attachments/assets/e54aa4ac-40a5-4cfa-9160-d67c7c4a7c96)
 
-# Before & After Slack
+### Before & After Slack
 
 ![image](https://github.com/user-attachments/assets/80fa4fcc-2abb-44c8-b331-49f9a6b6f95c)
 
@@ -616,15 +526,15 @@ sta pre_sta.conf
 
 It is reduced from -5.39 to -5.33
 
-# Replace the old netlist with the new netlist generated after timing ECO fix and implement the floorplan, placement and cts
+### Replace the old netlist with the new netlist generated after timing ECO fix and implement the floorplan, placement and cts
 
 ![image](https://github.com/user-attachments/assets/a31cd4f6-2668-4fb1-b6ad-4cb8190947e9)
 
-# Verified that the netlist is overwritten
+### Verified that the netlist is overwritten
 
 ![image](https://github.com/user-attachments/assets/6bc257f6-08bd-4f49-92a7-588c1a373758)
 
-# Load the design and run necessary stages
+### Load the design and run necessary stages
 
 ![image](https://github.com/user-attachments/assets/a7b80956-64b9-4a61-867a-36e942dc7a29)
 
@@ -648,33 +558,33 @@ It is reduced from -5.39 to -5.33
 * run_placement
   
 
-# CTS
+### CTS
 
 run_cts
 
 ![image](https://github.com/user-attachments/assets/4ecd354b-e6e5-479c-a71b-63cdcaef7aa1)
 
-# cts.tcl file
+### cts.tcl file
 
 ![image](https://github.com/user-attachments/assets/73bdccf8-3bfc-498b-97cf-2dabfc9090fc)
 
 
 ![image](https://github.com/user-attachments/assets/59c17bcb-a508-475c-b4f3-3c2aa566bc24)
 
-#  or_cts.tcl file 
+###  or_cts.tcl file 
 
 ![image](https://github.com/user-attachments/assets/40ea8d8e-b945-40d7-b94b-4f7c355c3a62)
 
 ![image](https://github.com/user-attachments/assets/a26c0468-d8c5-4f47-92e5-4cb62fe4702d)
 
-# sky130_fd_sc_hd__typical.lib file
+### sky130_fd_sc_hd__typical.lib file
 
 ![image](https://github.com/user-attachments/assets/a2dbd35e-5ac6-4b37-97cf-1321df931dc5)
 
 
-# Post-CTS OpenROAD timing analysis
+### Post-CTS OpenROAD timing analysis
 
-# openroad 
+### openroad 
 
 ![image](https://github.com/user-attachments/assets/9b50d096-0d77-4dd6-a222-f43aa4ef0b04)
 
@@ -688,7 +598,7 @@ run_cts
 
 ![image](https://github.com/user-attachments/assets/cf68f17b-96f9-4dfa-a1fa-8fff1816ab52)
 
-# Post-CTS OpenROAD timing analysis
+### Post-CTS OpenROAD timing analysis
 
 ![image](https://github.com/user-attachments/assets/a5069124-3e93-4895-896a-1a9bf4ab7642)
 
@@ -696,73 +606,28 @@ run_cts
 
 
 
-# Day 5 :Final steps for RTL2GDS using tritonRoute and openSTA
+## Day 5 :Final steps for RTL2GDS using tritonRoute and openSTA
 
-# Contents :
 
-* Routing and design rule check (DRC)
+### Introduction to Maze Routing and Lee's algorithm
 
-* Introduction to Maze Routing and Lee's algorithm
 
-* Lee's Algorithm conclusion
+![L4_0_e](https://github.com/user-attachments/assets/9c93c670-d675-4844-893a-dace6acede35)
 
-* Design Rule Check
+### Design rule check (DRC)
 
-* Power Distribution Network and routing
+![L4_0_f](https://github.com/user-attachments/assets/a7265977-69dd-4cf7-bf3c-06b001cb85dc)
 
-* Lab steps to build power distribution network
+### Routing
 
-* Lab steps from power straps to std cell power
-
-* Basics of global and detail routing and configure TritonRoute
-
-* TritonRoute Features
-
-* TritonRoute feature 1 - Honors pre-processed route guides
-
-* TritonRoute Feature2 & 3 - Inter-guide connectivity and intra- & inter-layer routing
-
-* TritonRoute method to handle connectivity
-
-* Routing topology algorithm and final files list post-route
-
-# Theory :
-
-![image](https://github.com/user-attachments/assets/eeb4a2ce-27f6-4f36-9338-6aef1440805d)
-
-![image](https://github.com/user-attachments/assets/d37a6214-5209-4dc8-b626-f053985b2fa0)
-
-![image](https://github.com/user-attachments/assets/1e9b5481-c63d-40e6-b665-10d9a07907c7)
-
-# Design rule check (DRC)
-
-![image](https://github.com/user-attachments/assets/5095ce67-774a-4022-a81a-ae4e25c98b56)
-
-![image](https://github.com/user-attachments/assets/df7e8e76-7857-4694-b327-ba41aad6123f)
-
-![image](https://github.com/user-attachments/assets/85980b02-fc93-4722-b44b-375698f34118)
-
-![image](https://github.com/user-attachments/assets/869629f7-99b9-4e5f-a777-2f121e34ba81)
-
-# Routing
-
-![image](https://github.com/user-attachments/assets/5d74f127-3a77-4adb-beb3-b38db4d8fb86)
-
-![image](https://github.com/user-attachments/assets/c2275484-ce26-4c87-bfcb-e7a22bdd43d5)
-
-![image](https://github.com/user-attachments/assets/8975e411-375e-489f-b74d-ad15f40035cf)
-
-![image](https://github.com/user-attachments/assets/f3320f9f-8947-4374-b6d4-4562874ed973)
-
-![image](https://github.com/user-attachments/assets/bf26306e-3978-4115-983a-fdc00a0eb654)
+![L4_0_g_para](https://github.com/user-attachments/assets/33af474a-49c3-469d-93ce-412ffe528e6f)
 
 # Routing Topology Algorithm
 
 ![image](https://github.com/user-attachments/assets/0f9f670e-28e9-4fa0-9e59-6ae83442d54f)
 
-# Day 5 LAB :
 
-# Perform generation of Power Distribution Network (PDN)
+### Perform generation of Power Distribution Network (PDN)
 
 gen_pdn
 
@@ -785,7 +650,7 @@ gen_pdn
 
 ![image](https://github.com/user-attachments/assets/c0f07989-983b-4957-a73e-eaf502344cf8)
 
-# Perform detailed routing using TritonRoute and explore the routed layout
+### Perform detailed routing using TritonRoute and explore the routed layout
 
 run_routing
 
@@ -801,12 +666,12 @@ fastroute.guide file
 
 ![image](https://github.com/user-attachments/assets/2f5818b6-3ce9-4db7-b07f-f204dab6234e)
 
-# Post-Route parasitic extraction
+### Post-Route parasitic extraction
 
 Parasitics command is already run and spef is extracted
 
 In runs folder, where routing outputs are dumped and we'll find the SPEF there.
 
-# Acknowledgements
+### Acknowledgements
 
 Kunal Ghosh, Co-founder, VSD Corp. Pvt. Ltd.
