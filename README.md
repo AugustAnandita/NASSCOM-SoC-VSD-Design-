@@ -1,7 +1,8 @@
 # NASSCOM-SoC-VSD-Design- 
 This repository summarizes the contents and labs covered in 5 days of the NASSCOM SoC VSD Design Workshop.
 
-![VSD](https://github.com/user-attachments/assets/cc1704c5-3cf4-40f4-8163-5350756f8e9a)
+![VSD](https://github.com/user-attachments/assets/4b6efa5a-ebe1-4698-b387-c6ba6be2985d)
+
 
 # WORKSHOP TOPICS
 
@@ -174,9 +175,11 @@ run_synthesis
 ## Day 2: Good Floorplan vs Bad Floorplan
 
 ### Introduction to Floorplanning
-![day2](https://github.com/user-attachments/assets/13184123-e431-40f9-85ba-92bc1f414b14)
-![day2 2](https://github.com/user-attachments/assets/45988e7f-4dba-48dd-a728-49ae54c7cc14)
 
+
+![F2_1](https://github.com/user-attachments/assets/cae3123b-e4c0-4599-b795-2b5dae1d053e)
+
+![F2_2](https://github.com/user-attachments/assets/278f10d5-06f7-441f-b463-7437282c249c)
 ### Key Concepts:
 
 #### Aspect Ratio
@@ -211,16 +214,19 @@ run_floorplan
 ```bash
 magic -T $PDK/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
 ```
-![lab 2 fp 1](https://github.com/user-attachments/assets/3c80b5f4-7821-4533-98c7-8a009a223080)
-![fp 2](https://github.com/user-attachments/assets/27a84638-4326-4fb6-a6a0-5ae659dadbe2)
-![fp 3](https://github.com/user-attachments/assets/2243289c-cd58-4e24-b5c0-0596d6c8bea2)
+
+![F2_3](https://github.com/user-attachments/assets/6f7af553-e4fa-4269-858e-24d1fb5b6027)
+![F2_4](https://github.com/user-attachments/assets/ac888477-4ad9-4efe-b543-fe7709c69d42)
+![F2_5](https://github.com/user-attachments/assets/ad6a4f3f-c2c7-47e3-b68a-a36ca249278c)
+
+
 
 2. **Run Placement**
 ```bash
 run_placement
 ```
 
-![fp 4](https://github.com/user-attachments/assets/f3d7d08f-8d7f-4fe1-b24c-c875a0df5bda)
+![F2_6_b](https://github.com/user-attachments/assets/df177928-4c15-4926-aa3e-635345d443de)
 
 3. **Load Placement in Magic**
 ```bash
@@ -230,8 +236,9 @@ magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs
 ```
 
 ### Placement Results
-![fp 5](https://github.com/user-attachments/assets/136a351f-27d8-4cdb-812a-b31518b264f3)
-![fp 5 5](https://github.com/user-attachments/assets/e05e4b74-c9fb-4420-ac43-aa558a4fc532)
+
+![F2_7_c](https://github.com/user-attachments/assets/f285cb94-9393-41d3-ae7d-05d2160631c2)
+![F2_8](https://github.com/user-attachments/assets/12c25669-d8ff-44ce-b347-ea6bffc701b5)
 
 
 
