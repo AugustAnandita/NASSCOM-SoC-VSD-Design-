@@ -1,4 +1,4 @@
-# NASSCOM-SoC-VSD-Design- 
+# NASSCOM-SoC-VSD-Design 
 This repository summarizes the contents and labs covered in 5 days of the NASSCOM SoC VSD Design Workshop.
 
 ![VSD](https://github.com/user-attachments/assets/4b6efa5a-ebe1-4698-b387-c6ba6be2985d)
